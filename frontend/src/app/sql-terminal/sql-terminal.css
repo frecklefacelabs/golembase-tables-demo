@@ -33,7 +33,7 @@
   border-radius: 6px;
   font-family: 'Consolas', 'Courier New', monospace;
   font-size: 0.8rem;
-  height:400px;
+  height:600px;
   resize: vertical;
   box-sizing: border-box;
   transition: border-color 0.2s, box-shadow 0.2s;
