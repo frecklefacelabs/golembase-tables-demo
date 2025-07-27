@@ -1,19 +1,34 @@
 <div class="terminal-container">
-  <h1 class="title">Golem-Base SQL Terminal</h1>
+  <h1 class="title">Angular SQL Terminal</h1>
   
+  <!-- App Name Input -->
+  <div class="form-group">
+    <label for="appName" class="input-label">App Name</label>
+    <input 
+      id="appName"
+      type="text"
+      [(ngModel)]="appName"
+      class="app-name-input"
+      placeholder="e.g., my-awesome-app-v1"
+      spellcheck="false"
+    />
+  </div>
+
   <!-- SQL Input Area -->
   <div class="form-group">
+    <label for="sqlQuery" class="input-label">SQL Query</label>
     <textarea 
+      id="sqlQuery"
       [(ngModel)]="sqlQuery"
       class="sql-textarea" 
       placeholder="Enter your SQL statements here..."
       rows="8"
-	  spellcheck="false"
+      spellcheck="false"
     ></textarea>
   </div>
   
   <!-- Submit Button -->
-  <button (click)="onSubmit()" [disabled]="isLoading" class="submit-button">
+  <button (click)="onSubmit()" [disabled]="isLoading || !appName.trim()" class="submit-button">
     {{ isLoading ? 'Executing...' : 'Execute SQL' }}
   </button>
   
@@ -25,10 +40,6 @@
       <!-- Loop through each result line -->
       <div *ngFor="let line of results" class="result-item">
         
-        <!-- 
-          FIXED: Replaced non-standard '*ngLet' with '*ngIf'.
-          This creates the 'parsed' variable without needing a custom directive.
-        -->
         <ng-container *ngIf="parseResultLine(line) as parsed">
           
           <!-- RENDER AS A TABLE IF JSON -->

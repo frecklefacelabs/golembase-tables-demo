@@ -17,11 +17,14 @@ type ParsedJsonResult = {
 @Component({
   selector: 'app-sql-terminal',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Import necessary modules for a standalone component
+  imports: [CommonModule, FormsModule],
   templateUrl: './sql-terminal.html',
   styleUrls: ['./sql-terminal.css']
 })
 export class SqlTerminalComponent {
+  // Add the appName property and give it a default value.
+  appName: string = 'GOLEM-SQLTEST-v0.3';
+  
   // The SQL query string, bound to the textarea.
   sqlQuery: string = 'CREATE TABLE users (id INT, name TEXT);\nINSERT INTO users (id, name) VALUES (1, "Alice");\nSELECT * FROM users;';
   
@@ -35,22 +38,25 @@ export class SqlTerminalComponent {
    * Executes the SQL query when the user clicks the submit button.
    */
   onSubmit() {
-    if (!this.sqlQuery.trim()) return;
+    if (!this.sqlQuery.trim() || !this.appName.trim()) return;
     this.isLoading = true;
-    this.results$ = this.sqlService.executeSql(this.sqlQuery).pipe(
-      finalize(() => this.isLoading = false) // Set loading to false when done
+    
+    // Create the payload object to send to the service.
+    const payload = {
+      appName: this.appName,
+      sql: this.sqlQuery
+    };
+
+    this.results$ = this.sqlService.executeSql(payload).pipe(
+      finalize(() => this.isLoading = false)
     );
   }
 
   /**
    * Parses a single result line to determine if it's a JSON string or a plain message.
-   * This is used by the template to decide how to render the line.
-   * @param line The result string to parse.
-   * @returns A ParsedJsonResult object.
    */
   parseResultLine(line: string): ParsedJsonResult {
     try {
-      // Check if it looks like a JSON object before trying to parse.
       if (line.trim().startsWith('{') && line.trim().endsWith('}')) {
         const parsedData = JSON.parse(line);
         return { isJson: true, data: parsedData };
