@@ -5,6 +5,8 @@ import { doSQL } from "@freckleface/golembase-tables";
 const app = express();
 const port = 3000;
 
+app.use(express.text());
+
 const corsOptions = {
   origin: 'http://localhost:4200' 
 };
@@ -15,8 +17,11 @@ app.get('/', (req, res) => {
 });
 
 // Pre-load sample data
-app.get('/dosql', async (req, res) => {
+app.post('/api/dosql', async (req, res) => {
+	console.log(req.body);
     const result: any = await doSQL("GOLEM-SQLTEST-v0.2", req.body)
+	console.log('RESULT:');
+	console.log(result);
     res.send(result);
 });
 

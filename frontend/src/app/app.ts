@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { SqlTerminalComponent } from './sql-terminal/sql-terminal';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [SqlTerminalComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
